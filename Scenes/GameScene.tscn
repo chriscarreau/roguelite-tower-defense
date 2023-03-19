@@ -1,0 +1,166 @@
+[gd_scene load_steps=10 format=3 uid="uid://b2vcjcfy7wv6c"]
+
+[ext_resource type="Script" path="res://Scenes/GameScene.cs" id="1_6orrq"]
+[ext_resource type="Texture2D" uid="uid://bi2naqdah7lqt" path="res://Assets/Tiles/terrainTiles_default.png" id="1_h8832"]
+[ext_resource type="Script" path="res://Scenes/UIManager.cs" id="3_cjyk8"]
+[ext_resource type="Texture2D" uid="uid://cueci33rxfpi" path="res://Assets/UI/UI/StraightRoute.png" id="3_lsa1n"]
+[ext_resource type="Texture2D" uid="uid://rbrf7mj2wxqa" path="res://Assets/UI/UI/badge.png" id="4_6whe3"]
+[ext_resource type="Script" path="res://Scenes/WaveManager.cs" id="5_kly1c"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xtkps"]
+texture = ExtResource("1_h8832")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+9:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+7:1/0 = 0
+8:1/0 = 0
+9:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+9:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+9:3/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_7wtbo"]
+tile_size = Vector2i(64, 64)
+sources/0 = SubResource("TileSetAtlasSource_xtkps")
+
+[sub_resource type="Curve2D" id="Curve2D_jxufe"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_6orrq")
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_7wtbo")
+cell_quadrant_size = 64
+format = 2
+layer_0/name = "Ground"
+layer_0/tile_data = PackedInt32Array(-1, 0, 0, 65535, 0, 0, 131071, 0, 0, 196607, 0, 1, 262143, 0, 0, 327679, 0, 1, 393215, 0, 0, 458751, 0, 1, 524287, 524288, 1, 589823, 0, 3, 655359, 0, 3, 720895, 0, 3, 786431, 0, 3, -65536, 0, 0, 0, 0, 1, 65536, 0, 0, 131072, 0, 1, 196608, 0, 0, 262144, 0, 1, 327680, 0, 1, 393216, 0, 1, 458752, 524288, 1, 524288, 0, 2, 589824, 0, 3, 655360, 0, 2, 720896, 0, 3, -65535, 0, 1, 1, 0, 1, 65537, 0, 1, 131073, 0, 1, 196609, 0, 1, 262145, 0, 0, 327681, 0, 0, 393217, 0, 0, 458753, 524288, 1, 524289, 0, 2, 589825, 0, 2, 655361, 0, 2, 720897, 0, 2, -65534, 0, 0, 2, 0, 0, 65538, 0, 1, 131074, 0, 1, 196610, 0, 0, 262146, 0, 1, 327682, 0, 1, 393218, 0, 0, 458754, 524288, 1, 524290, 0, 3, 589826, 0, 3, 655362, 0, 3, 720898, 0, 3, -65533, 0, 1, 3, 0, 1, 65539, 0, 0, 131075, 0, 1, 196611, 0, 0, 262147, 0, 1, 327683, 0, 0, 393219, 0, 1, 458755, 524288, 1, 524291, 0, 2, 589827, 0, 3, 655363, 0, 2, 720899, 0, 2, -65532, 0, 0, 4, 0, 0, 65540, 0, 1, 131076, 0, 1, 196612, 0, 1, 262148, 0, 1, 327684, 0, 0, 393220, 0, 1, 458756, 524288, 1, 524292, 0, 2, 589828, 0, 3, 655364, 0, 2, 720900, 0, 2, -65531, 0, 0, 5, 0, 1, 65541, 0, 1, 131077, 0, 1, 196613, 0, 1, 262149, 0, 1, 327685, 0, 0, 393221, 0, 0, 458757, 524288, 1, 524293, 0, 3, 589829, 0, 3, 655365, 0, 2, 720901, 0, 3, -65530, 0, 1, 6, 0, 1, 65542, 0, 0, 131078, 0, 0, 196614, 0, 0, 262150, 0, 0, 327686, 0, 1, 393222, 0, 0, 458758, 524288, 1, 524294, 0, 3, 589830, 0, 2, 655366, 0, 3, 720902, 0, 3, -65529, 0, 0, 7, 0, 0, 65543, 0, 1, 131079, 0, 1, 196615, 0, 0, 262151, 0, 0, 327687, 0, 0, 393223, 0, 1, 458759, 524288, 1, 524295, 0, 2, 589831, 0, 2, 655367, 0, 3, 720903, 0, 3, -65528, 0, 0, 8, 0, 1, 65544, 0, 1, 131080, 0, 1, 196616, 0, 1, 262152, 0, 0, 327688, 0, 1, 393224, 0, 1, 458760, 524288, 1, 524296, 0, 2, 589832, 0, 2, 655368, 0, 2, 720904, 0, 2, -65527, 0, 1, 9, 0, 1, 65545, 0, 0, 131081, 0, 1, 196617, 0, 1, 262153, 0, 1, 327689, 0, 0, 393225, 0, 1, 458761, 524288, 1, 524297, 0, 3, 589833, 0, 2, 655369, 0, 3, 720905, 0, 2, -65526, 0, 1, 10, 0, 0, 65546, 0, 1, 131082, 0, 1, 196618, 0, 1, 262154, 0, 0, 327690, 0, 0, 393226, 0, 1, 458762, 524288, 1, 524298, 0, 3, 589834, 0, 2, 655370, 0, 3, 720906, 0, 2, -65525, 0, 1, 11, 0, 0, 65547, 0, 1, 131083, 0, 1, 196619, 0, 1, 262155, 0, 1, 327691, 0, 0, 393227, 0, 0, 458763, 524288, 1, 524299, 0, 3, 589835, 0, 2, 655371, 0, 3, 720907, 0, 2, -65524, 0, 0, 12, 0, 0, 65548, 0, 1, 131084, 0, 1, 196620, 0, 0, 262156, 0, 0, 327692, 0, 0, 393228, 0, 0, 458764, 524288, 1, 524300, 0, 2, 589836, 0, 2, 655372, 0, 3, 720908, 0, 2, -65523, 0, 0, 13, 0, 1, 65549, 0, 0, 131085, 0, 1, 196621, 0, 1, 262157, 0, 1, 327693, 0, 1, 393229, 0, 0, 458765, 524288, 1, 524301, 0, 3, 589837, 0, 3, 655373, 0, 3, 720909, 0, 3, -65522, 0, 1, 14, 0, 1, 65550, 0, 0, 131086, 0, 1, 196622, 0, 1, 262158, 0, 1, 327694, 0, 0, 393230, 0, 0, 458766, 524288, 1, 524302, 0, 3, 589838, 0, 2, 655374, 0, 3, 720910, 0, 2, -65521, 0, 0, 15, 0, 0, 65551, 0, 1, 131087, 0, 1, 196623, 0, 1, 262159, 0, 1, 327695, 0, 0, 393231, 0, 1, 458767, 524288, 1, 524303, 0, 2, 589839, 0, 3, 655375, 0, 3, 720911, 0, 3, -65520, 0, 1, 16, 0, 1, 65552, 0, 0, 131088, 0, 1, 196624, 0, 1, 262160, 0, 1, 327696, 0, 1, 393232, 0, 0, 458768, 524288, 1, 524304, 0, 2, 589840, 0, 2, 655376, 0, 2, 720912, 0, 2, -65519, 0, 0, 17, 0, 1, 65553, 0, 0, 131089, 0, 0, 196625, 0, 1, 262161, 0, 0, 327697, 0, 1, 393233, 0, 1, 458769, 524288, 1, 524305, 0, 2, 589841, 0, 3, 655377, 0, 2, 720913, 0, 2, -65518, 0, 1, 18, 0, 0, 65554, 0, 1, 131090, 0, 1, 196626, 0, 0, 262162, 0, 1, 327698, 0, 1, 393234, 0, 0, 458770, 524288, 1, 524306, 0, 2, 589842, 0, 3, 655378, 0, 2, 720914, 0, 2)
+layer_1/name = "RouteAndTowers"
+layer_1/enabled = true
+layer_1/modulate = Color(1, 1, 1, 1)
+layer_1/y_sort_enabled = false
+layer_1/y_sort_origin = 0
+layer_1/z_index = 1
+layer_1/tile_data = PackedInt32Array()
+
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource("Curve2D_jxufe")
+
+[node name="UI" type="CanvasLayer" parent="."]
+script = ExtResource("3_cjyk8")
+
+[node name="HUD" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Inventory" type="HBoxContainer" parent="UI/HUD"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 30
+alignment = 1
+
+[node name="Control" type="MarginContainer" parent="UI/HUD/Inventory"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="StraightRouteBtn" type="TextureButton" parent="UI/HUD/Inventory/Control" groups=["build_buttons"]]
+layout_mode = 2
+texture_normal = ExtResource("3_lsa1n")
+
+[node name="GridContainer" type="VBoxContainer" parent="UI/HUD/Inventory/Control"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/HUD/Inventory/Control/GridContainer"]
+layout_mode = 2
+mouse_filter = 2
+alignment = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/HUD/Inventory/Control/GridContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = -10
+theme_override_constants/margin_right = -10
+
+[node name="TextureRect" type="TextureRect" parent="UI/HUD/Inventory/Control/GridContainer/HBoxContainer/MarginContainer"]
+modulate = Color(0.878431, 0.396078, 0, 1)
+layout_mode = 2
+texture = ExtResource("4_6whe3")
+expand_mode = 2
+
+[node name="RouteBadge" type="Label" parent="UI/HUD/Inventory/Control/GridContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+text = "1"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/HUD"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -56.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="HBoxContainer" parent="UI/HUD/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="StartBtn" type="Button" parent="UI/HUD/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "START"
+
+[node name="WaveManager" type="Node" parent="." node_paths=PackedStringArray("Path")]
+script = ExtResource("5_kly1c")
+Path = NodePath("../Path2D")
+
+[connection signal="pressed" from="UI/HUD/MarginContainer/VBoxContainer/StartBtn" to="UI" method="OnStartBtnPressed"]
