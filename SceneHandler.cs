@@ -5,6 +5,7 @@ using System;
 public partial class SceneHandler : Node
 {
 	PackedScene GameScene = (PackedScene)ResourceLoader.Load("res://Scenes/GameScene.tscn");
+	PackedScene MenuScene = (PackedScene)ResourceLoader.Load("res://Scenes/MenuScene.tscn");
 	Dictionary<ScenesEnum, PackedScene> Scenes = new Dictionary<ScenesEnum, PackedScene>();
 	GameEvents GameEvents;
 
@@ -12,8 +13,10 @@ public partial class SceneHandler : Node
 	{
 		GameEvents = GetNode<GameEvents>("/root/GameEvents");
 		Scenes[ScenesEnum.Game] = GameScene;
-		GameEvents.NewGame += () => this.OnNewGamePressed();
-		GameEvents.ExitGame += () => this.Exit();
+		Scenes[ScenesEnum.MainMenu] = MenuScene;
+		GameEvents.NewGame += OnNewGamePressed;
+		GameEvents.GameOver += () => TransitionToScene(ScenesEnum.MainMenu);
+		GameEvents.ExitGame += Exit;
 	}
 	public void OnNewGamePressed()
 	{
@@ -29,7 +32,7 @@ public partial class SceneHandler : Node
 	/// Replace current scene by provided scene
 	/// </summary>
 	/// <param name="scene">The scene to transition to</param>
-	private void TransitionToScene(ScenesEnum scene)
+	public void TransitionToScene(ScenesEnum scene)
 	{
 		var currentScenes = GetChildren();
 		foreach (Node sc in currentScenes)

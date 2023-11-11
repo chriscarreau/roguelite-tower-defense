@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3 uid="uid://cu6a0iq6k6o8o"]
+
+[ext_resource type="Texture2D" uid="uid://di37ypjy7ueb0" path="res://Assets/Towers/basic_tower_base.png" id="1_044bl"]
+[ext_resource type="Script" path="res://Scenes/Towers/BaseTower.cs" id="1_wuiov"]
+[ext_resource type="Texture2D" uid="uid://0ojd4kbvpm2e" path="res://Assets/Towers/basic_tower_top.png" id="2_ktg3n"]
+[ext_resource type="Resource" uid="uid://mri5udb1ce8o" path="res://Resources/Towers/BaseTower.tres" id="2_uovji"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qo2bq"]
+
+[node name="BaseTower" type="Node2D"]
+z_index = 3
+script = ExtResource("1_wuiov")
+TowerData = ExtResource("2_uovji")
+
+[node name="Base" type="Sprite2D" parent="."]
+texture = ExtResource("1_044bl")
+
+[node name="Tower" type="Sprite2D" parent="."]
+texture = ExtResource("2_ktg3n")
+offset = Vector2(12, 0)
+
+[node name="RangeArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RangeArea"]
+shape = SubResource("CircleShape2D_qo2bq")
+
+[connection signal="body_entered" from="RangeArea" to="." method="OnRangeEntered"]
+[connection signal="body_exited" from="RangeArea" to="." method="OnRangeExited"]

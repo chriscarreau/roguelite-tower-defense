@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://mri5udb1ce8o"]
+
+[ext_resource type="Script" path="res://Resources/Towers/TowerResource.cs" id="1_k3bxl"]
+
+[resource]
+script = ExtResource("1_k3bxl")
+Range = 100
+BaseDamage = 50
+RateOfFire = 1.0
+ProjectileSpeed = 1000.0

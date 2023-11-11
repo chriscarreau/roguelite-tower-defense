@@ -7,16 +7,33 @@ public partial class WaveManager : Node
 	Path2D Path;
 
 	GameEvents GameEvents;
+	GameStateManager GameStateManager;
+	private UIManager _uiManager;
+	private bool _waveActive;
 
 	public override void _Ready()
 	{
 		GameEvents = GetNode<GameEvents>("/root/GameEvents");
+		GameStateManager = GetNode<GameStateManager>("%GameStateManager");
+		_uiManager = GetNode<UIManager>("%UI");
 		GameEvents.StartWave += () => SpawnNextWave();
 	}
 
-	public async void SpawnNextWave()
+    public override void _PhysicsProcess(double delta)
+    {
+        if (_waveActive && Path.GetChildCount() == 0) {
+			_waveActive = false;
+			_uiManager.SetStartButtonEnabled(true);
+		}
+    }
+
+    public async void SpawnNextWave()
 	{
+		var currentWave = GameStateManager.IncreaseWave();
 		List<WaveUnit> wave = GenerateWave();
+		_uiManager.UpdateWaveLabel(currentWave);
+		_waveActive = true;
+		_uiManager.SetStartButtonEnabled(false);
 		foreach(var waveUnit in wave)
 		{
 			SpawnUnit(waveUnit);
@@ -26,10 +43,12 @@ public partial class WaveManager : Node
 
 	private List<WaveUnit> GenerateWave()
 	{
-		var wave = new List<WaveUnit>();
-		wave.Add(new WaveUnit(EnemyType.Basic, 0.5f));
-		wave.Add(new WaveUnit(EnemyType.Basic, 0.5f));
-		wave.Add(new WaveUnit(EnemyType.Basic, 0.5f));
+		var wave = new List<WaveUnit>
+        {
+            new WaveUnit(EnemyType.Basic, 0.5f),
+            new WaveUnit(EnemyType.Basic, 0.5f),
+            new WaveUnit(EnemyType.Basic, 0.5f)
+        };
 		return wave;
 	}
 	

@@ -28,10 +28,10 @@ public partial class GameScene : Node2D
 		_gameState = GetNode<GameState>("/root/GameState");
 		_map = GetNode<TileMap>("TileMap");
 		_path = GetNode<Path2D>("Path2D");
-		_badge = GetNode<Label>("UI/HUD/Inventory/Control/GridContainer/HBoxContainer/MarginContainer/RouteBadge");
+		_badge = GetNode<Label>("UI/HUD/TextureButton/GridContainer/HBoxContainer/MarginContainer/RouteBadge");
 		foreach (var buildBtn in GetTree().GetNodesInGroup("build_buttons"))
 		{
-			buildBtn.Connect(TextureButton.SignalName.Pressed, Callable.From(() => this.InitiateBuildMode(buildBtn.Name.ToString())));
+			buildBtn.Connect(TextureButton.SignalName.Pressed, Callable.From(() => InitiateBuildMode(buildBtn.Name.ToString())));
 		}
 		CreateRoute();
 	}
@@ -60,9 +60,9 @@ public partial class GameScene : Node2D
 		}
 	}
 
-    private void BuildRoute()
-    {
-        RouteSegment lastSegment = GetLastSegment();
+	private void BuildRoute()
+	{
+		RouteSegment lastSegment = GetLastSegment();
 		if (!_canBuild) {
 			return;
 		}
@@ -82,33 +82,33 @@ public partial class GameScene : Node2D
 			destination = Direction.Top;
 		}
 		var newSegment = new RouteSegment(origin, destination, _currentBuildLocation);
-        lastSegment.NextSegment = newSegment;
+		lastSegment.NextSegment = newSegment;
 		lastSegment.Destination = destination;
-    }
+	}
 
-    private bool CanBuild(Vector2I lastSegmentPosition, Vector2I buildPosition)
-    {
+	private bool CanBuild(Vector2I lastSegmentPosition, Vector2I buildPosition)
+	{
 		var deltaX = Mathf.Abs(lastSegmentPosition.X - buildPosition.X);
 		var deltaY = Mathf.Abs(lastSegmentPosition.Y - buildPosition.Y);
-        if (deltaX + deltaY == 1)
+		if (deltaX + deltaY == 1)
 		{
 			return _map.GetCellTileData(1, buildPosition) == null;
 		}
 		return false;
-    }
+	}
 
-    private RouteSegment GetLastSegment()
-    {
-        var currSegment = _route;
-        while (currSegment.NextSegment != null)
-        {
-            currSegment = currSegment.NextSegment;
-        }
+	private RouteSegment GetLastSegment()
+	{
+		var currSegment = _route;
+		while (currSegment.NextSegment != null)
+		{
+			currSegment = currSegment.NextSegment;
+		}
 
-        return currSegment;
-    }
+		return currSegment;
+	}
 
-    private void CreateRoute() {
+	private void CreateRoute() {
 		_path.Curve = new Curve2D();
 		var currSegment = _route;
 		var length = 0;
@@ -136,6 +136,7 @@ public partial class GameScene : Node2D
 
 	private void CancelBuildMode() {
 		RemoveChild(_routePreview);
+		_routePreview.QueueFree();
 		_routePreview = null;
 		_isBuildMode = false;
 	}

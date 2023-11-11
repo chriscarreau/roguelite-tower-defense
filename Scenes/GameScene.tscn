@@ -1,11 +1,16 @@
-[gd_scene load_steps=10 format=3 uid="uid://b2vcjcfy7wv6c"]
+[gd_scene load_steps=15 format=3 uid="uid://b2vcjcfy7wv6c"]
 
 [ext_resource type="Script" path="res://Scenes/GameScene.cs" id="1_6orrq"]
 [ext_resource type="Texture2D" uid="uid://bi2naqdah7lqt" path="res://Assets/Tiles/terrainTiles_default.png" id="1_h8832"]
 [ext_resource type="Script" path="res://Scenes/UIManager.cs" id="3_cjyk8"]
-[ext_resource type="Texture2D" uid="uid://cueci33rxfpi" path="res://Assets/UI/UI/StraightRoute.png" id="3_lsa1n"]
 [ext_resource type="Texture2D" uid="uid://rbrf7mj2wxqa" path="res://Assets/UI/UI/badge.png" id="4_6whe3"]
+[ext_resource type="Texture2D" uid="uid://do6ohryehrbtq" path="res://Assets/UI/ButtonTexture.png" id="4_but7o"]
 [ext_resource type="Script" path="res://Scenes/WaveManager.cs" id="5_kly1c"]
+[ext_resource type="Texture2D" uid="uid://deui0duv5el8x" path="res://Assets/UI/UI/hammer.png" id="5_rv20w"]
+[ext_resource type="Texture2D" uid="uid://1saolrho7vpw" path="res://Assets/UI/UI/star.png" id="7_dgchr"]
+[ext_resource type="Texture2D" uid="uid://dnqy3lox8qj5v" path="res://Assets/UI/UI/singleplayer.png" id="8_gb5uj"]
+[ext_resource type="PackedScene" uid="uid://cu6a0iq6k6o8o" path="res://Scenes/Towers/BaseTower.tscn" id="9_s3qyi"]
+[ext_resource type="Script" path="res://Scripts/GameStateManager.cs" id="11_ly0ie"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xtkps"]
 texture = ExtResource("1_h8832")
@@ -78,6 +83,7 @@ layer_1/tile_data = PackedInt32Array()
 curve = SubResource("Curve2D_jxufe")
 
 [node name="UI" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
 script = ExtResource("3_cjyk8")
 
 [node name="HUD" type="Control" parent="UI"]
@@ -88,51 +94,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-
-[node name="Inventory" type="HBoxContainer" parent="UI/HUD"]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_constants/separation = 30
-alignment = 1
-
-[node name="Control" type="MarginContainer" parent="UI/HUD/Inventory"]
-layout_mode = 2
-mouse_filter = 2
-
-[node name="StraightRouteBtn" type="TextureButton" parent="UI/HUD/Inventory/Control" groups=["build_buttons"]]
-layout_mode = 2
-texture_normal = ExtResource("3_lsa1n")
-
-[node name="GridContainer" type="VBoxContainer" parent="UI/HUD/Inventory/Control"]
-layout_mode = 2
-mouse_filter = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/HUD/Inventory/Control/GridContainer"]
-layout_mode = 2
-mouse_filter = 2
-alignment = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="UI/HUD/Inventory/Control/GridContainer/HBoxContainer"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_top = -10
-theme_override_constants/margin_right = -10
-
-[node name="TextureRect" type="TextureRect" parent="UI/HUD/Inventory/Control/GridContainer/HBoxContainer/MarginContainer"]
-modulate = Color(0.878431, 0.396078, 0, 1)
-layout_mode = 2
-texture = ExtResource("4_6whe3")
-expand_mode = 2
-
-[node name="RouteBadge" type="Label" parent="UI/HUD/Inventory/Control/GridContainer/HBoxContainer/MarginContainer"]
-layout_mode = 2
-text = "1"
-horizontal_alignment = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="UI/HUD"]
 layout_mode = 1
@@ -156,11 +117,107 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="StartBtn" type="Button" parent="UI/HUD/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "START"
 
+[node name="TextureButton" type="TextureButton" parent="UI/HUD" groups=["build_buttons"]]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -104.0
+offset_top = 18.0
+offset_right = -43.0
+offset_bottom = 86.0
+grow_horizontal = 0
+texture_normal = ExtResource("4_but7o")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="GridContainer" type="VBoxContainer" parent="UI/HUD/TextureButton"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -64.0
+offset_bottom = 64.0
+grow_horizontal = 0
+mouse_filter = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/HUD/TextureButton/GridContainer"]
+layout_mode = 2
+mouse_filter = 2
+alignment = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/HUD/TextureButton/GridContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = -10
+theme_override_constants/margin_right = -10
+
+[node name="TextureRect" type="TextureRect" parent="UI/HUD/TextureButton/GridContainer/HBoxContainer/MarginContainer"]
+modulate = Color(0.878431, 0.396078, 0, 1)
+layout_mode = 2
+texture = ExtResource("4_6whe3")
+expand_mode = 2
+
+[node name="RouteBadge" type="Label" parent="UI/HUD/TextureButton/GridContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+text = "1"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="UI/HUD/TextureButton"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 58.0
+offset_bottom = 56.0
+texture = ExtResource("5_rv20w")
+expand_mode = 2
+
+[node name="TopLeftBar" type="HBoxContainer" parent="UI/HUD"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 40
+
+[node name="Wave" type="HBoxContainer" parent="UI/HUD/TopLeftBar"]
+layout_mode = 2
+
+[node name="WaveIcon" type="TextureRect" parent="UI/HUD/TopLeftBar/Wave"]
+layout_mode = 2
+texture = ExtResource("7_dgchr")
+
+[node name="WaveLbl" type="Label" parent="UI/HUD/TopLeftBar/Wave"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "99"
+
+[node name="Health" type="HBoxContainer" parent="UI/HUD/TopLeftBar"]
+layout_mode = 2
+
+[node name="HealthIcon" type="TextureRect" parent="UI/HUD/TopLeftBar/Health"]
+layout_mode = 2
+texture = ExtResource("8_gb5uj")
+
+[node name="HealthLbl" type="Label" parent="UI/HUD/TopLeftBar/Health"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "1"
+
 [node name="WaveManager" type="Node" parent="." node_paths=PackedStringArray("Path")]
+unique_name_in_owner = true
 script = ExtResource("5_kly1c")
 Path = NodePath("../Path2D")
+
+[node name="BaseTower" parent="." instance=ExtResource("9_s3qyi")]
+position = Vector2(476, 426)
+
+[node name="GameStateManager" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("11_ly0ie")
 
 [connection signal="pressed" from="UI/HUD/MarginContainer/VBoxContainer/StartBtn" to="UI" method="OnStartBtnPressed"]
