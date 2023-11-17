@@ -6,7 +6,7 @@ public partial class Basic : BaseEnemy
 	public override void _Ready()
 	{
 		base._Ready();
-		this.Speed = 100;
-		this.Health = 100;
+		Speed = 100;
+		Health = 100;
 	}
 }
