@@ -5,94 +5,91 @@ using System.Collections.Generic;
 public partial class GameScene : Node2D
 {
 	/*==== Nodes ====*/
-	private TileMap _map;
-	private Path2D _path;
-	private Vector2I _currentBuildLocation;
-	private Control _routePreview;
-	private Label _badge;
+	public TileMap Map;
+	public Path2D Path;
+	public Vector2I CurrentBuildLocation;
+	public Control Preview;
+	public Label Badge;
 
-	/*==== Internal State ====*/
-	private RouteSegment _route;
-	private int _currentRouteLength;
-	private GameState _gameState;
-	private bool _isBuildMode;
-	private bool _canBuild;
-	private string _currentBuildType;
-	private List<BaseTower> _towers = new List<BaseTower>();
+	/*==== State ====*/
+	public State CurrentState;
+	public RouteSegment Route;
+	public List<BaseTower> Towers = new List<BaseTower>();
+	public int CurrentRouteLength;
+	public GameState GameState;
 
 
 	public override void _Ready()
 	{
-		_route = new RouteSegment(Direction.Left, Direction.Right, new Vector2I(1,5));
-		_route.NextSegment = new RouteSegment(Direction.Left, Direction.Right, new Vector2I(2,5));
-		_route.NextSegment.PreviousSegment = _route;
-		_gameState = GetNode<GameState>("/root/GameState");
-		_map = GetNode<TileMap>("TileMap");
-		_path = GetNode<Path2D>("Path2D");
-		_badge = GetNode<Label>("UI/HUD/TextureButton/GridContainer/HBoxContainer/MarginContainer/RouteBadge");
-		foreach (var buildBtn in GetTree().GetNodesInGroup("build_buttons"))
-		{
-			buildBtn.Connect(TextureButton.SignalName.Pressed, Callable.From(() => InitiateBuildMode(buildBtn.Name.ToString())));
-		}
-		CreateRoute();
+		CurrentState = new DefaultState{GameScene = this};
+		Route = new RouteSegment(Direction.Left, Direction.Right, new Vector2I(1,5));
+		GameState = GetNode<GameState>("/root/GameState");
+		Map = GetNode<TileMap>("TileMap");
+		Path = GetNode<Path2D>("Path2D");
+		Badge = GetNode<Label>("UI/HUD/RouteButton/GridContainer/HBoxContainer/MarginContainer/RouteBadge");
+		ComputeRoute();
 	}
 
 	public override void _Process(double delta){
-		if (_isBuildMode) {
-			UpdateTowerPreview();
-		}
+		CurrentState.Process(delta);
 	}
 
 	public override void _PhysicsProcess(double delta){
-		if (_isBuildMode) {
-			
-		}
-	}
+		CurrentState.PhysicsProcess(delta);
+    }
 
-	private void InitiateBuildMode(string name)
+	public void ChangeState(State nextState)
 	{
-		if (_gameState.RouteLength - _currentRouteLength <= 0) {
-			return;
-		}
-		_currentBuildType = name;
-		_isBuildMode = true;
+		nextState.GameScene = this;
+		CurrentState = nextState;
+	}
+	
+	public void BuildRouteButtonPressed()
+	{
+		CurrentState.HandleButton(ButtonEnum.BuildRouteButton);
+	}
+	
+	public void BuildTowerButtonPressed()
+	{
+		CurrentState.HandleButton(ButtonEnum.BuildTowerButton);
 	}
 
-	private void CancelBuildMode() {
-		RemoveChild(_routePreview);
-		_routePreview.QueueFree();
-		_routePreview = null;
-		_isBuildMode = false;
+	public void ComputeRoute() {
+		Path.Curve = new Curve2D();
+		var currSegment = Route;
+		var length = 0;
+		while (currSegment != null)
+		{
+			Map.SetCell(1, currSegment.Coords, 0, GetSegmentTilesetCoord(currSegment));
+			var globalCoord = ToGlobal(Map.MapToLocal(currSegment.Coords));
+			Path.Curve.AddPoint(globalCoord);
+			currSegment = currSegment.NextSegment;
+			length++;
+		}
+		CurrentRouteLength = length;
+		DrawDebugLine();
+		UpdateLabel();
 	}
 
-	private void UpdateTowerPreview() {
-		var mousePosition = GetGlobalMousePosition();
-		var currentTile = _map.LocalToMap(ToLocal(mousePosition));
-		var tilePosition = ToGlobal(_map.MapToLocal(currentTile));
-		tilePosition.X -= 32;
-		tilePosition.Y -= 32;
-		_currentBuildLocation = currentTile;
-		if (_routePreview == null){
-			_routePreview = new Control();
-            var overlay = new TextureRect
-            {
-                Texture = GD.Load<Texture2D>("res://Assets/UI/UI/Overlay.png"),
-                Modulate = new Color(1, 0, 0),
-                ZIndex = 5,
-                Name = "Overlay"
-            };
-            _routePreview.AddChild(overlay);
-			AddChild(_routePreview);
+	private void DrawDebugLine() {
+		Line2D line = GetNodeOrNull<Line2D>("DebugLine");
+		if (line == null) {
+			line = new Line2D();
+			AddChild(line);
 		}
-		RouteSegment lastSegment = GetLastSegment();
-		_routePreview.Position = tilePosition;
-		if (CanBuild(lastSegment.Coords, _currentBuildLocation)){
-			_canBuild = true;
-			_routePreview.GetNode<TextureRect>("Overlay").Modulate = new Color(0,1,0);
-		} else {
-			_canBuild = false;
-			_routePreview.GetNode<TextureRect>("Overlay").Modulate = new Color(1,0,0);
+		line.ClearPoints();
+		line.DefaultColor = new Color(1,1,1,1);
+		line.Width = 10;
+		foreach (var point in Path.Curve.GetBakedPoints())
+		{
+			line.AddPoint(point);
 		}
+		line.ZIndex = 3;
+		line.Name = "DebugLine";
+	}
+
+	private void UpdateLabel() {
+		Badge.Text = (GameState.RouteLength - CurrentRouteLength).ToString();
 	}
 
 	private Vector2I GetSegmentTilesetCoord(RouteSegment segment) {
@@ -121,26 +118,5 @@ public partial class GameScene : Node2D
 			return new Vector2I(3,1);
 		}
 		return new Vector2I(0,0);
-	}
-
-	private void DrawDebugLine() {
-		Line2D line = GetNodeOrNull<Line2D>("DebugLine");
-		if (line == null) {
-			line = new Line2D();
-			AddChild(line);
-		}
-		line.ClearPoints();
-		line.DefaultColor = new Color(1,1,1,1);
-		line.Width = 10;
-		foreach (var point in _path.Curve.GetBakedPoints())
-		{
-			line.AddPoint(point);
-		}
-		line.ZIndex = 3;
-		line.Name = "DebugLine";
-	}
-
-	private void UpdateLabel() {
-		_badge.Text = (_gameState.RouteLength - _currentRouteLength).ToString();
 	}
 }

@@ -30,7 +30,7 @@ public partial class WaveManager : Node
     public async void SpawnNextWave()
 	{
 		var currentWave = GameStateManager.IncreaseWave();
-		List<WaveUnit> wave = GenerateWave();
+		List<WaveUnit> wave = GenerateWave(currentWave);
 		_uiManager.UpdateWaveLabel(currentWave);
 		_waveActive = true;
 		_uiManager.SetStartButtonEnabled(false);
@@ -41,14 +41,13 @@ public partial class WaveManager : Node
 		}
 	}
 
-	private List<WaveUnit> GenerateWave()
+	private List<WaveUnit> GenerateWave(long currentWave)
 	{
-		var wave = new List<WaveUnit>
-        {
-            new WaveUnit(EnemyType.Basic, 0.5f),
-            new WaveUnit(EnemyType.Basic, 0.5f),
-            new WaveUnit(EnemyType.Basic, 0.5f)
-        };
+		var wave = new List<WaveUnit>();
+		for (int i = 0; i < currentWave; i++)
+		{
+			wave.Add(new WaveUnit(EnemyType.Basic, 0.5f));
+		}
 		return wave;
 	}
 	

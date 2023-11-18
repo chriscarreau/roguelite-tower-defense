@@ -4,11 +4,20 @@
         {
             "label": "build",
             "command": "dotnet",
-            "type": "shell",
+            "type": "process",
             "args": [
                 "build"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "type": "dotnet",
+            "task": "build",
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": "build",
+            "label": "dotnet: build"
         }
     ]
 }

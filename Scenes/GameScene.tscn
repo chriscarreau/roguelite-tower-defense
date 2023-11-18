@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://b2vcjcfy7wv6c"]
+[gd_scene load_steps=16 format=3 uid="uid://b2vcjcfy7wv6c"]
 
 [ext_resource type="Script" path="res://Scenes/GameScene.cs" id="1_6orrq"]
 [ext_resource type="Texture2D" uid="uid://bi2naqdah7lqt" path="res://Assets/Tiles/terrainTiles_default.png" id="1_h8832"]
@@ -7,9 +7,10 @@
 [ext_resource type="Texture2D" uid="uid://do6ohryehrbtq" path="res://Assets/UI/ButtonTexture.png" id="4_but7o"]
 [ext_resource type="Script" path="res://Scenes/WaveManager.cs" id="5_kly1c"]
 [ext_resource type="Texture2D" uid="uid://deui0duv5el8x" path="res://Assets/UI/UI/hammer.png" id="5_rv20w"]
+[ext_resource type="Texture2D" uid="uid://bts3s3yxg7c0c" path="res://Assets/UI/DarkButtonTexture.png" id="7_au2gf"]
 [ext_resource type="Texture2D" uid="uid://1saolrho7vpw" path="res://Assets/UI/UI/star.png" id="7_dgchr"]
 [ext_resource type="Texture2D" uid="uid://dnqy3lox8qj5v" path="res://Assets/UI/UI/singleplayer.png" id="8_gb5uj"]
-[ext_resource type="PackedScene" uid="uid://cu6a0iq6k6o8o" path="res://Scenes/Towers/BaseTower.tscn" id="9_s3qyi"]
+[ext_resource type="Texture2D" uid="uid://criw2mpfhcukx" path="res://Assets/UI/UI/structure_tower.png" id="8_if37q"]
 [ext_resource type="Script" path="res://Scripts/GameStateManager.cs" id="11_ly0ie"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xtkps"]
@@ -121,7 +122,7 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "START"
 
-[node name="TextureButton" type="TextureButton" parent="UI/HUD" groups=["build_buttons"]]
+[node name="RouteButton" type="TextureButton" parent="UI/HUD"]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -135,7 +136,7 @@ texture_normal = ExtResource("4_but7o")
 ignore_texture_size = true
 stretch_mode = 4
 
-[node name="GridContainer" type="VBoxContainer" parent="UI/HUD/TextureButton"]
+[node name="GridContainer" type="VBoxContainer" parent="UI/HUD/RouteButton"]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -145,35 +146,58 @@ offset_bottom = 64.0
 grow_horizontal = 0
 mouse_filter = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/HUD/TextureButton/GridContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/HUD/RouteButton/GridContainer"]
 layout_mode = 2
 mouse_filter = 2
 alignment = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="UI/HUD/TextureButton/GridContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="UI/HUD/RouteButton/GridContainer/HBoxContainer"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_top = -10
 theme_override_constants/margin_right = -10
 
-[node name="TextureRect" type="TextureRect" parent="UI/HUD/TextureButton/GridContainer/HBoxContainer/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="UI/HUD/RouteButton/GridContainer/HBoxContainer/MarginContainer"]
 modulate = Color(0.878431, 0.396078, 0, 1)
 layout_mode = 2
 texture = ExtResource("4_6whe3")
 expand_mode = 2
 
-[node name="RouteBadge" type="Label" parent="UI/HUD/TextureButton/GridContainer/HBoxContainer/MarginContainer"]
+[node name="RouteBadge" type="Label" parent="UI/HUD/RouteButton/GridContainer/HBoxContainer/MarginContainer"]
 layout_mode = 2
 text = "1"
 horizontal_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="UI/HUD/TextureButton"]
+[node name="TextureRect" type="TextureRect" parent="UI/HUD/RouteButton"]
 layout_mode = 0
 offset_left = 4.0
 offset_top = 2.0
 offset_right = 58.0
 offset_bottom = 56.0
 texture = ExtResource("5_rv20w")
+expand_mode = 2
+
+[node name="TowerButton" type="TextureButton" parent="UI/HUD"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -104.0
+offset_top = 91.0
+offset_right = -43.0
+offset_bottom = 159.0
+grow_horizontal = 0
+texture_normal = ExtResource("7_au2gf")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="TextureRect" type="TextureRect" parent="UI/HUD/TowerButton"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 58.0
+offset_bottom = 56.0
+texture = ExtResource("8_if37q")
 expand_mode = 2
 
 [node name="TopLeftBar" type="HBoxContainer" parent="UI/HUD"]
@@ -213,11 +237,10 @@ unique_name_in_owner = true
 script = ExtResource("5_kly1c")
 Path = NodePath("../Path2D")
 
-[node name="BaseTower" parent="." instance=ExtResource("9_s3qyi")]
-position = Vector2(476, 426)
-
 [node name="GameStateManager" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("11_ly0ie")
 
 [connection signal="pressed" from="UI/HUD/MarginContainer/VBoxContainer/StartBtn" to="UI" method="OnStartBtnPressed"]
+[connection signal="pressed" from="UI/HUD/RouteButton" to="." method="BuildRouteButtonPressed"]
+[connection signal="pressed" from="UI/HUD/TowerButton" to="." method="BuildTowerButtonPressed"]

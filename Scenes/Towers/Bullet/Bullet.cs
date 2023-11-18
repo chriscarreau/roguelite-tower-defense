@@ -13,6 +13,10 @@ public partial class Bullet : Node2D
 
 	public override void _PhysicsProcess(double delta)
 	{
+		if (Target == null)
+		{
+			QueueFree();
+		}
 		GlobalPosition = GlobalPosition.MoveToward(Target.GlobalPosition, Speed * (float)delta);
 	}
 

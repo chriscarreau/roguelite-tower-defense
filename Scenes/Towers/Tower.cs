@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-public partial class Tower : Node
+public partial class Tower : Node2D
 {
 	[Export]
 	public TowerResource TowerData;
