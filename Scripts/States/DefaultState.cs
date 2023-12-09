@@ -2,6 +2,11 @@ using Godot;
 
 public class DefaultState : State
 {
+    public DefaultState(GameScene gameScene) : base(gameScene)
+    {
+    }
+
+
     public override void Process(double delta)
     {
         
@@ -29,14 +34,14 @@ public class DefaultState : State
 
 	private void InitiateBuildMode()
 	{
-		if (GameScene.GameState.RouteLength - GameScene.CurrentRouteLength <= 0) {
+		if (_gameScene.GameState.RouteLength - _gameScene.CurrentRouteLength <= 0) {
 			return;
 		}
-		GameScene.ChangeState(new BuildRouteState());
+		_gameScene.ChangeState(new BuildRouteState(_gameScene));
 	}
 
 	public void BuildTowerButtonPressed()
 	{
-		GameScene.ChangeState(new BuildTowerState());
+		_gameScene.ChangeState(new BuildTowerState(_gameScene, new BaseTower()));
 	}
 }

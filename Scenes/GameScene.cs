@@ -17,17 +17,22 @@ public partial class GameScene : Node2D
 	public List<BaseTower> Towers = new List<BaseTower>();
 	public int CurrentRouteLength;
 	public GameState GameState;
+	public GameStateManager GameStateManager;
+	public GameEvents GameEvents;
 
 
 	public override void _Ready()
 	{
-		CurrentState = new DefaultState{GameScene = this};
+		CurrentState = new DefaultState(this);
 		Route = new RouteSegment(Direction.Left, Direction.Right, new Vector2I(1,5));
 		GameState = GetNode<GameState>("/root/GameState");
+		GameEvents = GetNode<GameEvents>("/root/GameEvents");
+		GameStateManager = GetNode<GameStateManager>("%GameStateManager");
 		Map = GetNode<TileMap>("TileMap");
 		Path = GetNode<Path2D>("Path2D");
 		Badge = GetNode<Label>("UI/HUD/RouteButton/GridContainer/HBoxContainer/MarginContainer/RouteBadge");
 		ComputeRoute();
+		GameEvents.EmitSignal(GameEvents.SignalName.ResetGameState);
 	}
 
 	public override void _Process(double delta){
@@ -40,7 +45,6 @@ public partial class GameScene : Node2D
 
 	public void ChangeState(State nextState)
 	{
-		nextState.GameScene = this;
 		CurrentState = nextState;
 	}
 	

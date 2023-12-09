@@ -8,6 +8,7 @@ public partial class UIManager : CanvasLayer
 
 	private Label _healthLabel;
 	private Label _waveLabel;
+	private Label _coinsLabel;
 	private Button _startBtn;
 
 	// Called when the node enters the scene tree for the first time.
@@ -18,6 +19,7 @@ public partial class UIManager : CanvasLayer
 		_healthLabel = GetNode<Label>("%HealthLbl");
 		_waveLabel = GetNode<Label>("%WaveLbl");
 		_startBtn = GetNode<Button>("%StartBtn");
+		_coinsLabel = GetNode<Label>("%CoinsLbl");
 	}
 
 	public void OnStartBtnPressed()
@@ -33,6 +35,11 @@ public partial class UIManager : CanvasLayer
 	public void UpdateWaveLabel(long wave)
 	{
 		_waveLabel.Text = wave.ToString();
+	}
+
+	public void UpdateCoinsLabel(long coins)
+	{
+		_coinsLabel.Text = coins.ToString();
 	}
 
 	public void SetStartButtonEnabled(bool enabled)

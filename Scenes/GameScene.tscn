@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://b2vcjcfy7wv6c"]
+[gd_scene load_steps=17 format=3 uid="uid://b2vcjcfy7wv6c"]
 
 [ext_resource type="Script" path="res://Scenes/GameScene.cs" id="1_6orrq"]
 [ext_resource type="Texture2D" uid="uid://bi2naqdah7lqt" path="res://Assets/Tiles/terrainTiles_default.png" id="1_h8832"]
@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://1saolrho7vpw" path="res://Assets/UI/UI/star.png" id="7_dgchr"]
 [ext_resource type="Texture2D" uid="uid://dnqy3lox8qj5v" path="res://Assets/UI/UI/singleplayer.png" id="8_gb5uj"]
 [ext_resource type="Texture2D" uid="uid://criw2mpfhcukx" path="res://Assets/UI/UI/structure_tower.png" id="8_if37q"]
+[ext_resource type="Texture2D" uid="uid://d3hdwd5cmdejt" path="res://Assets/UI/UI/tokens.png" id="11_klny8"]
 [ext_resource type="Script" path="res://Scripts/GameStateManager.cs" id="11_ly0ie"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xtkps"]
@@ -227,6 +228,19 @@ layout_mode = 2
 texture = ExtResource("8_gb5uj")
 
 [node name="HealthLbl" type="Label" parent="UI/HUD/TopLeftBar/Health"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "1"
+
+[node name="Coins" type="HBoxContainer" parent="UI/HUD/TopLeftBar"]
+layout_mode = 2
+
+[node name="CoinsIcon" type="TextureRect" parent="UI/HUD/TopLeftBar/Coins"]
+layout_mode = 2
+texture = ExtResource("11_klny8")
+
+[node name="CoinsLbl" type="Label" parent="UI/HUD/TopLeftBar/Coins"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 32

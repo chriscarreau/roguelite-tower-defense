@@ -38,6 +38,7 @@ public partial class SceneHandler : Node
 		foreach (Node sc in currentScenes)
 		{
 			RemoveChild(sc);
+			sc.QueueFree();
 		}
 		var instance = Scenes[scene].Instantiate();
 		AddChild(instance);

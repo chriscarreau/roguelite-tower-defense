@@ -17,7 +17,7 @@ public partial class Tower : Node2D
 	private bool _isFiring;
 	private PackedScene _bulletScene = ResourceLoader.Load<PackedScene>("res://Scenes/Towers/Bullet/Bullet.tscn");
 
-	public override void _Ready()
+    public override void _Ready()
 	{
 		_towerSprite = GetNode<Sprite2D>("Tower");
 		_rangeArea = GetNode<Area2D>("RangeArea");

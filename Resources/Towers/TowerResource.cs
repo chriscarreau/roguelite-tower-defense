@@ -7,6 +7,9 @@ public partial class TowerResource : Resource
     [Export]
 	public int Range { get; set; }
 
+    [Export]
+	public int Cost { get; set; }
+
 	[Export]
 	public int BaseDamage { get; set; }
 

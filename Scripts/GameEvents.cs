@@ -18,5 +18,11 @@ public partial class GameEvents : Node
     public delegate void GameOverEventHandler();
 
     [Signal]
+    public delegate void EnemyDefeatedEventHandler(long reward);
+
+    [Signal]
     public delegate void EnemyReachEndEventHandler(long healthRemoved);
+
+    [Signal]
+    public delegate void ResetGameStateEventHandler();
 }

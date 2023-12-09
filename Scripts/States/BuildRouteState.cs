@@ -4,6 +4,11 @@ public class BuildRouteState : State
 {
 	private bool _canBuild;
 
+    public BuildRouteState(GameScene gameScene) : base(gameScene)
+    {
+    }
+
+
     public override void Process(double delta)
     {
         UpdateRoutePreview();
@@ -14,17 +19,17 @@ public class BuildRouteState : State
         if (Input.IsActionPressed("build"))
 		{
 			AddRouteSegment();
-			GameScene.ComputeRoute();
-			if (GameScene.GameState.RouteLength - GameScene.CurrentRouteLength == 0)
+			_gameScene.ComputeRoute();
+			if (_gameScene.GameState.RouteLength - _gameScene.CurrentRouteLength == 0)
 			{
 				CancelBuildRoute();
-				GameScene.ChangeState(new DefaultState());
+				_gameScene.ChangeState(new DefaultState(_gameScene));
 			}
 		}
 		if (Input.IsActionPressed("cancel"))
 		{
 			CancelBuildRoute();
-			GameScene.ChangeState(new DefaultState());
+			_gameScene.ChangeState(new DefaultState(_gameScene));
 		}
     }
 
@@ -34,11 +39,11 @@ public class BuildRouteState : State
         {
             case ButtonEnum.BuildRouteButton:
                 CancelBuildRoute();
-				GameScene.ChangeState(new DefaultState());
+				_gameScene.ChangeState(new DefaultState(_gameScene));
                 return;
             case ButtonEnum.BuildTowerButton:
                 CancelBuildRoute();
-				GameScene.ChangeState(new BuildTowerState());
+				_gameScene.ChangeState(new BuildTowerState(_gameScene, new BaseTower()));
                 return;
             default:
                 GD.PrintErr("Unhandled button of type " + button.ToString());
@@ -47,9 +52,9 @@ public class BuildRouteState : State
     }
 
 	private void CancelBuildRoute() {
-		GameScene.RemoveChild(GameScene.Preview);
-		GameScene.Preview.QueueFree();
-		GameScene.Preview = null;
+		_gameScene.RemoveChild(_gameScene.Preview);
+		_gameScene.Preview.QueueFree();
+		_gameScene.Preview = null;
 	}
 
 	private void AddRouteSegment()
@@ -60,27 +65,27 @@ public class BuildRouteState : State
 		}
 		Direction origin = Direction.Top;
 		Direction destination = Direction.Bottom;
-		if (GameScene.CurrentBuildLocation.X > lastSegment.Coords.X){
+		if (_gameScene.CurrentBuildLocation.X > lastSegment.Coords.X){
 			origin = Direction.Left;
 			destination = Direction.Right;
-		} else if (GameScene.CurrentBuildLocation.X < lastSegment.Coords.X) {
+		} else if (_gameScene.CurrentBuildLocation.X < lastSegment.Coords.X) {
 			origin = Direction.Right;
 			destination = Direction.Left;
-		} else if (GameScene.CurrentBuildLocation.Y > lastSegment.Coords.Y) {
+		} else if (_gameScene.CurrentBuildLocation.Y > lastSegment.Coords.Y) {
 			origin = Direction.Top;
 			destination = Direction.Bottom;
-		} else if (GameScene.CurrentBuildLocation.Y < lastSegment.Coords.Y) {
+		} else if (_gameScene.CurrentBuildLocation.Y < lastSegment.Coords.Y) {
 			origin = Direction.Bottom;
 			destination = Direction.Top;
 		}
-		var newSegment = new RouteSegment(origin, destination, GameScene.CurrentBuildLocation);
+		var newSegment = new RouteSegment(origin, destination, _gameScene.CurrentBuildLocation);
 		lastSegment.NextSegment = newSegment;
 		lastSegment.Destination = destination;
 	}
 
 	private RouteSegment GetLastSegment()
 	{
-		var currSegment = GameScene.Route;
+		var currSegment = _gameScene.Route;
 		while (currSegment.NextSegment != null)
 		{
 			currSegment = currSegment.NextSegment;
@@ -95,20 +100,20 @@ public class BuildRouteState : State
 		var deltaY = Mathf.Abs(lastSegmentPosition.Y - buildPosition.Y);
 		if (deltaX + deltaY == 1)
 		{
-			return GameScene.Map.GetCellTileData(1, buildPosition) == null;
+			return _gameScene.Map.GetCellTileData(1, buildPosition) == null;
 		}
 		return false;
 	}
 
 	private void UpdateRoutePreview() {
-		var mousePosition = GameScene.GetGlobalMousePosition();
-		var currentTile = GameScene.Map.LocalToMap(GameScene.ToLocal(mousePosition));
-		var tilePosition = GameScene.ToGlobal(GameScene.Map.MapToLocal(currentTile));
+		var mousePosition = _gameScene.GetGlobalMousePosition();
+		var currentTile = _gameScene.Map.LocalToMap(_gameScene.ToLocal(mousePosition));
+		var tilePosition = _gameScene.ToGlobal(_gameScene.Map.MapToLocal(currentTile));
 		tilePosition.X -= 32;
 		tilePosition.Y -= 32;
-		GameScene.CurrentBuildLocation = currentTile;
-		if (GameScene.Preview == null){
-			GameScene.Preview = new Control();
+		_gameScene.CurrentBuildLocation = currentTile;
+		if (_gameScene.Preview == null){
+			_gameScene.Preview = new Control();
             var overlay = new TextureRect
             {
                 Texture = GD.Load<Texture2D>("res://Assets/UI/UI/Overlay.png"),
@@ -124,17 +129,17 @@ public class BuildRouteState : State
                 Name = "Prev"
             };
 			overlay.AddChild(routePreview);
-			GameScene.Preview.AddChild(overlay);
-			GameScene.AddChild(GameScene.Preview);
+			_gameScene.Preview.AddChild(overlay);
+			_gameScene.AddChild(_gameScene.Preview);
 		}
 		RouteSegment lastSegment = GetLastSegment();
-		GameScene.Preview.Position = tilePosition;
-		if (CheckCanBuild(lastSegment.Coords, GameScene.CurrentBuildLocation)){
+		_gameScene.Preview.Position = tilePosition;
+		if (CheckCanBuild(lastSegment.Coords, _gameScene.CurrentBuildLocation)){
 			_canBuild = true;
-			GameScene.Preview.GetNode<TextureRect>("Overlay").Modulate = new Color(0,1,0);
+			_gameScene.Preview.GetNode<TextureRect>("Overlay").Modulate = new Color(0,1,0);
 		} else {
 			_canBuild = false;
-			GameScene.Preview.GetNode<TextureRect>("Overlay").Modulate = new Color(1,0,0);
+			_gameScene.Preview.GetNode<TextureRect>("Overlay").Modulate = new Color(1,0,0);
 		}
 	}
 }

@@ -8,6 +8,9 @@ public partial class BaseEnemy : PathFollow2D
 	[Export]
 	public int Health = 100;
 
+	[Export]
+	public long Reward = 10;
+
 	private GameEvents _gameEvents;
 
 	public override void _Ready()
@@ -25,6 +28,7 @@ public partial class BaseEnemy : PathFollow2D
 		Health -= dmg;
 		if (Health <= 0)
 		{
+			_gameEvents.EmitSignal(GameEvents.SignalName.EnemyDefeated, Reward);
 			OnDestroy();
 		}
 	}

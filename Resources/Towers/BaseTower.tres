@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_k3bxl")
 Range = 100
+Cost = 100
 BaseDamage = 50
 RateOfFire = 1.0
 ProjectileSpeed = 1000.0
